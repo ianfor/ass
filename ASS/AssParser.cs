@@ -54,7 +54,7 @@ namespace ASS
             return true;
         }
 
-        public void Merge(List<KeyValuePair<string, string>> storys)
+        public void Merge(List<KeyValuePair<string, string>> storys, Action<int, int> callback)
         {
 
         }

@@ -66,6 +66,27 @@ namespace ASS
                 })));
                 Log("网页分析成功, 获取了 " + result.Count().ToString() + " 行数据. unknows: ", false);
                 Log(String.Join("\r\n", unknows), false);
+
+                Log("开始合并ass文件...", false);
+                var parser = new AssParser(this.textBox2.Text);
+                if (parser.Parse())
+                {
+                    Log("加载:" + this.textBox2.Text + "文件成功.", false);
+                    parser.Merge(result, new Action<int, int>((int curcent, int total)=> 
+                    {
+                        int val = (int)((double)curcent / (double)total * 70);
+                        this.Invoke(new Action(() =>
+                        {
+                            this.progressBar1.Value += val;
+                        }));
+                        
+                    }));
+                    parser.GenerateResult();
+                }
+                else
+                {
+                    Log("加载ass文件失败.", false);
+                }
             }
             else
             {
