@@ -54,17 +54,33 @@ namespace ASS
             return true;
         }
 
-        public void Merge(List<KeyValuePair<string, string>> storys, Action<int, int> callback)
+        public void HandleLine(int index, List<KeyValuePair<string, string>> storys)
         {
 
         }
 
+        //https://mulan.fandom.com/wiki/Mulan/Transcript
+        public void Merge(List<KeyValuePair<string, string>> storys, Action<int, int> callback)
+        {
+            int total = this._contents.Count();
+            for(int index = 0; index < total; ++index)
+            {
+                callback(index + 1, total);
+                HandleLine(index, storys);
+            }
+        }
 
-        public void GenerateResult()
+        public string ResultFileName()
         {
             int index = this._path.LastIndexOf(".");
             string filepath = this._path.Substring(0, index) + "_res" + this._path.Substring(index);
-            
+            return filepath;
+        }
+
+        public void GenerateResult()
+        {
+            string filepath = ResultFileName();
+
             using (StreamWriter sw = new StreamWriter(filepath))
             {
                 foreach(var line in this._headers)

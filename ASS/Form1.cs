@@ -77,11 +77,12 @@ namespace ASS
                         int val = (int)((double)curcent / (double)total * 70);
                         this.Invoke(new Action(() =>
                         {
-                            this.progressBar1.Value += val;
+                            this.progressBar1.Value = 20+val;
                         }));
                         
                     }));
                     parser.GenerateResult();
+                    Log("合并成功, ass 文件: \r\n" + parser.ResultFileName(), false);
                 }
                 else
                 {
