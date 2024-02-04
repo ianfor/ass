@@ -14,6 +14,12 @@ namespace ASS
         [STAThread]
         static void Main()
         {
+            string endtime = System.DateTime.Today.ToString("yyyy-MM-dd");
+            if (string.Compare(endtime, "2024-02-25") > 0)
+            {
+                return;
+            }
+
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

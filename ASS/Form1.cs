@@ -19,8 +19,11 @@ namespace ASS
 
             this.start.Enabled = true;
             this.progressBar1.Value = 0;
+
+#if DEBUG
             this.textBox1.Text = "https://mulan.fandom.com/wiki/Mulan/Transcript";
             this.textBox2.Text = @"C:\Users\Administrator\Downloads\[xiepp.com]Mulan.1998.BluRay.720p.x264.AC3.4Audios-CMCT.EN.ass";
+#endif
         }
 
         private void start_Click(object sender, EventArgs e)
@@ -69,12 +72,12 @@ namespace ASS
                 Log("网页分析成功, 获取了 " + result.Count().ToString() + " 行数据. unknows: ", false);
                 Log(String.Join("\r\n", unknows), false);
 
-                Log("开始合并ass文件...", false);
                 var parser = new AssParser(this.textBox2.Text);
+                List<KeyValuePair<string, int>> fails = new List<KeyValuePair<string, int>>();
                 if (parser.Parse())
                 {
                     Log("加载:" + this.textBox2.Text + "文件成功.", false);
-                    parser.Merge(result, new Action<int, int>((int curcent, int total)=> 
+                    parser.Merge(result, ref fails, new Action<int, int>((int curcent, int total)=> 
                     {
                         int val = (int)((double)curcent / (double)total * 70);
                         this.Invoke(new Action(() =>
@@ -88,7 +91,19 @@ namespace ASS
                         Log(log, false);
                     }));
                     parser.GenerateResult();
-                    Log("合并成功, ass 文件: \r\n" + parser.ResultFileName(), false);
+                    Log("合并完成, ass 文件: \r\n" + parser.ResultFileName(), false);
+                    if (fails.Count > 0)
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        sb.AppendLine("以下行数匹配失败:");
+                        foreach (var item in fails)
+                        {
+                            sb.AppendLine("第" + item.Value.ToString() + "行: " + item.Key);
+                        }
+
+                        Log(sb.ToString(), false);
+                    }
+                    
                 }
                 else
                 {

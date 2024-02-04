@@ -71,7 +71,7 @@ namespace ASS
             {
                 if (lastname != null)
                 {
-                    return KeyValuePair.Create(lastname, text);
+                    return KeyValuePair.Create(lastname, text.ToLower());
                 }
             }
 
