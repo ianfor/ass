@@ -17,10 +17,11 @@ namespace ASS
         {
             InitializeComponent();
 
-            this.start.Enabled = true;
+            this.start.Enabled = false;
             this.progressBar1.Value = 0;
 
 #if DEBUG
+            this.start.Enabled = true;
             this.textBox1.Text = "https://mulan.fandom.com/wiki/Mulan/Transcript";
             this.textBox2.Text = @"C:\Users\Administrator\Downloads\[xiepp.com]Mulan.1998.BluRay.720p.x264.AC3.4Audios-CMCT.EN.ass";
 #endif
@@ -118,7 +119,8 @@ namespace ASS
             this.Invoke(new Action(() =>
             {
                 this.progressBar1.Value = 100;
-                this.start.Enabled = true;
+                //this.start.Enabled = true;
+                ChangeStartBtn();
             }));
         }
 

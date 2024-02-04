@@ -286,11 +286,12 @@ namespace ASS
             if (string.IsNullOrWhiteSpace(line))
                 return true;
 
+            int fileline = index + _headers.Count + 1;
             string english = GetEnglish(line);
             if (english == null)
             {
                 if (!string.IsNullOrWhiteSpace(line))
-                    log("在 " + (index + _headers.Count) + "获取英文失败: " + line);
+                    log("在 " + fileline + "获取英文失败: " + line);
                 return true;
             }
 
@@ -329,18 +330,18 @@ namespace ASS
                 ReplaceLineName(index, name);
                 return true;
             }
-            log("在" + (index + _headers.Count) + "初次匹配失败: " + back_english + " 即将使用相似度匹配算法进行匹配");
+            log("在" + fileline + "初次匹配失败: " + back_english + " 即将使用相似度匹配算法进行匹配");
             string sname = SimilarMatch(english, storys);
             if (sname != null)
             {
-                log("在" + (index + _headers.Count) + "相似度匹配成功: " + back_english);
+                log("在" + fileline + "相似度匹配成功: " + back_english);
                 ReplaceLineName(index, sname);
                 return true;
             }
             else
             {
-                log("在" + (index + _headers.Count) + "相似度匹配失败: " + back_english);
-                fails.Add(KeyValuePair.Create(back_english, index + _headers.Count));
+                log("在" + fileline + "相似度匹配失败: " + back_english);
+                fails.Add(KeyValuePair.Create(back_english, fileline));
             }
             return false;
         }
