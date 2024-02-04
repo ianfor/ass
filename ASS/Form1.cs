@@ -17,8 +17,10 @@ namespace ASS
         {
             InitializeComponent();
 
-            this.start.Enabled = false;
+            this.start.Enabled = true;
             this.progressBar1.Value = 0;
+            this.textBox1.Text = "https://mulan.fandom.com/wiki/Mulan/Transcript";
+            this.textBox2.Text = @"C:\Users\Administrator\Downloads\[xiepp.com]Mulan.1998.BluRay.720p.x264.AC3.4Audios-CMCT.EN.ass";
         }
 
         private void start_Click(object sender, EventArgs e)
@@ -80,6 +82,10 @@ namespace ASS
                             this.progressBar1.Value = 20+val;
                         }));
                         
+                    }),
+                    new Action<string>((string log)=> 
+                    {
+                        Log(log, false);
                     }));
                     parser.GenerateResult();
                     Log("合并成功, ass 文件: \r\n" + parser.ResultFileName(), false);

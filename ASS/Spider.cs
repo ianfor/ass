@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Text.RegularExpressions;
 namespace ASS
 {
     class Spider
@@ -39,7 +39,7 @@ namespace ASS
             {
                 var res = this.ParseNode(pnode, lastname);
                 if (res != null)
-                {
+                {                    
                     result.Add(res.Value);
                     lastname = res.Value.Key;
                 }                    
@@ -59,18 +59,19 @@ namespace ASS
             }
 
             var text = node.InnerText.Trim();
+            text = Regex.Replace(text, @"\s+", " ");
             var index = text.IndexOf(":");
             if (index != -1)
             {
-                var name = text.Substring(0, index);
-                var value = text.Substring(index).ToLower();
+                var name = text.Substring(0, index+1);
+                var value = text.Substring(index+1).ToLower();
                 return KeyValuePair.Create(name, value);
             }
             else
             {
                 if (lastname != null)
                 {
-                    return KeyValuePair.Create(lastname, node.InnerText.ToLower());
+                    return KeyValuePair.Create(lastname, text);
                 }
             }
 
