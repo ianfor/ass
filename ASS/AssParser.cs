@@ -12,6 +12,7 @@ namespace ASS
         private string _path;
         private List<string> _headers;
         private List<String> _contents;
+        private string _lastname;
         public AssParser(string path)
         {
             _path = path;
@@ -273,9 +274,14 @@ namespace ASS
 
         private void ReplaceLineName(int index, string name)
         {
-            string line = this._contents.ElementAt(index);
-            string newline = line.Replace(",Default,,0,0,0,", ",Default," + name + ",0,0,0,");
-            this._contents[index] = newline;
+            if (this._lastname != name)
+            {
+                this._lastname = name;
+                string line = this._contents.ElementAt(index);
+                string newline = line.Replace(",Default,,0,0,0,", ",Default," + name + ",0,0,0,");
+                this._contents[index] = newline;
+            }
+            
         }
 
         private bool HandleLine(int index, ref int startline, ref List<KeyValuePair<string, int>> fails, List<KeyValuePair<string, string>> storys, Action<string> log)
@@ -343,6 +349,8 @@ namespace ASS
                 log("在" + fileline + "相似度匹配失败: " + back_english);
                 fails.Add(KeyValuePair.Create(back_english, fileline));
             }
+
+            this._lastname = string.Empty;
             return false;
         }
 
@@ -351,7 +359,8 @@ namespace ASS
         {
             int total = this._contents.Count();
             int startline = 0;
-            for(int index = 0; index < total; ++index)
+            _lastname = string.Empty;
+            for (int index = 0; index < total; ++index)
             {
                 callback(index + 1, total);
                 HandleLine(index, ref startline, ref fails, storys, log);
